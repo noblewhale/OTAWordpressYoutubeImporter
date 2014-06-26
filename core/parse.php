@@ -236,8 +236,17 @@ function WP_ayvpp_add_import_posts($x=1,$n=20,$r=false) {
 					$title = is_array($a['title']) ? $a['title']['value'] : $a['title'];
 				//}
 				//$title = apply_filters("post_title_save_pre",utf8_decode($title));
+
 				
 				if(!empty($title)) {
+                    // OTA STUFF
+                    // Remove " | OFF THE AVENUE E**" from post titles
+                    $isOTA = false;
+                    if (strpos($title, "OFF THE AVENUE") !== false)
+                    {
+                        $title = preg_replace('/ \| OFF THE AVENUE.*$/', "", $title);
+                        $isOTA = true;
+                    }
 					$a = array(
 						'post_title'					=>	$title,
 						'post_content'					=>	$s,
@@ -249,6 +258,16 @@ function WP_ayvpp_add_import_posts($x=1,$n=20,$r=false) {
 					);
 
 					$a['id'] = WP_ayvpp_insert_post(array_merge($tern_wp_youtube_post_defaults,$a),$i);
+                    
+                    // OTA STUFF
+                    // Parse artist name and set as tag
+                    if ($isOTA)
+                    {
+                        preg_match('/^(.*) "/', $title, $artist);
+                        $artist = $artist[1];
+                        wp_set_post_tags($a['id'], $artist, false);
+                    }
+
 					if($a['id']) {
 						if($n == '*') {
 							WP_ayvpp_update_file('<span class="imported">'.($x+$c).'. '.$title.'</span>');
