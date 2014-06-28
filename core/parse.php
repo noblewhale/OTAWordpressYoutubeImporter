@@ -244,8 +244,9 @@ function WP_ayvpp_add_import_posts($x=1,$n=20,$r=false) {
           $isOTA = false;
           if (strpos($title, "OFF THE AVENUE") !== false)
           {
-             $title = preg_replace('/ \| OFF THE AVENUE.*$/', "", $title);
-             $isOTA = true;
+            $title = preg_replace('/ \| OFF THE AVENUE.*$/', "", $title);
+            $isOTA = true;
+            $title = preg_replace("/&#8220;|&#8221;|''?/", '"', $title);
           }
           $a = array(
             'post_title'          =>  $title,
@@ -263,7 +264,7 @@ function WP_ayvpp_add_import_posts($x=1,$n=20,$r=false) {
           // Parse artist name and set as tag
           if ($isOTA)
           {
-            preg_match('/^(.*) "/', $title, $artist);
+            preg_match('/^(.*?) *"/', $title, $artist);
             $artist = $artist[1];
             wp_set_post_tags($a['id'], $artist, false);
             add_post_meta($a['id'], 'duration', $w['media:group']['yt:duration']['attributes']['seconds'], true);
