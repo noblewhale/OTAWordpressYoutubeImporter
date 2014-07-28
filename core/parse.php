@@ -35,7 +35,7 @@ ini_set(max_execution_time,600);
 //                                **                           **                                 //
 //                                *******************************                                 //
 if($GLOBALS['pagenow'] != 'admin-ajax.php') {
-  add_action('init','WP_ayvpp_add_posts',10);
+  add_action('init','WP_ayvpp_add_posts',100);
 }
 add_action('publish_post','WP_ayvpp_update_meta');
 add_action('save_post','WP_ayvpp_update_meta');
@@ -93,7 +93,6 @@ function WP_ayvpp_add_posts($x=1,$n=20,$f=false) {
   
 }
 function WP_ayvpp_add_import_posts($x=1,$n=20,$r=false) {
-
   global $getWP,$getFILE,$tern_wp_users,$tern_wp_youtube_o,$tern_wp_youtube_videos,$tern_wp_youtube_keys,$tern_wp_youtube_vids,$tern_wp_youtube_post_defaults,$tern_wp_youtube_feed,$tern_wp_youtube_channels,$wpdb;
 
   //deal with memory issues
@@ -143,7 +142,6 @@ function WP_ayvpp_add_import_posts($x=1,$n=20,$r=false) {
 
     $c = 0;
     foreach((array)$tern_wp_youtube_vids as $w) {
-      
       unset($i,$k,$s,$t,$a,$d,$m,$y,$f,$z,$title);
       
       //get video ID
@@ -163,7 +161,6 @@ function WP_ayvpp_add_import_posts($x=1,$n=20,$r=false) {
       $video = $wpdb->get_var("select meta_value from $wpdb->postmeta where meta_key='$i'");
 
       if(!empty($i) and strlen($i) > 0 and !$video and !in_array($i,$tern_wp_youtube_videos)) {
-
         //get info about a video
         $y = new tern_curl();
         $f = $y->get(array(
